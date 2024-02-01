@@ -1,0 +1,33 @@
+<html>
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+  </head>
+  <body style="backface-visibility: hidden;">
+    <link rel="stylesheet" href="/css/toolbar.css" type="text/css">
+
+    <form id="searchForm" target="_blank" method="get">
+      <div id="box" class="sggstInputWrap"><!-- skip space.
+     --><button title="閉じる" id="closeBtn" class="closeBtn" type="button" style="display: inline-block;">
+          <img alt="閉じる" src="/img/bar_btn_close.png">
+        </button><!--
+     --><input id="searchBox" type="text"><!--
+     --><button title="ウェブ検索" id="websearchBtn" class="searchBtn" type="button" style="display: inline-block;">
+          <img alt="ウェブ検索" src="/img/bar_btn_search.png">
+        </button><!--
+     --><button title="商品検索" id="ichibaSearchBtn" class="searchBtn" type="button" style="display: inline-block;">
+          <img alt="商品検索" src="/img/bar_btn_ichiba.png">
+        </button><!--
+     --><span> | </span><!--
+     --><button title="設定" id="settingBtn" class="settingBtn" type="button" style="display: inline-block;">
+          <img alt="設定" src="/img/bar_btn_setting.png">
+        </button><!--
+     --><div id="sggstConfig" form="searchForm" input="searchBox" col="toolbar" button="websearchBtn" suggestid="jp_websearch_ac_page_004"
+             baseurl="https://rdc-api-catalog-gateway-api.rakuten.co.jp/gsp-ac/autocomplete/v1/autocomplete.jp_websearch_page" encoding="utf-8" sendformparam="1">
+        </div>
+      </div>
+    </form>
+
+    <script type="text/javascript" src="/js/content_searchbar.js"></script>
+    <script type="text/javascript" src="/js/content_suggest.js"></script>
+  </body>
+</html>

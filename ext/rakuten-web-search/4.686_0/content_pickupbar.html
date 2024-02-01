@@ -1,0 +1,117 @@
+<html>
+
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+</head>
+
+<body style="margin:0px; padding:0px;background-color: #fff;text-align:center;">
+  <div id="bar"></div>
+  <script type="text/javascript" src="/js/content_pickupbar.js"></script>
+  <link rel="stylesheet" type="text/css" charset="UTF-8" href="https://cdnjs.cloudflare.com/ajax/libs/slick-carousel/1.6.0/slick.min.css"
+  />
+  <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/slick-carousel/1.6.0/slick-theme.min.css"
+  />
+  <style>
+    div.pointbox:hover {
+      position: relative;
+      color: #333;
+    }
+
+    div.pointbox span.tooltip {
+      display: none;
+    }
+
+    div.pointbox:hover span.tooltip {
+      display: block;
+      position: absolute;
+      top: -7px;
+      font-size: 80%;
+      color: #fff;
+      background-color: rgb(255, 140, 0);
+      width: 240px;
+      padding: 0px 5px;
+      border-radius: 3px;
+      z-index: 100;
+      line-height: 24px;
+    }
+
+    div.spubox {
+      display: inline-block;
+    }
+
+    div.spubox:hover {
+      position: relative;
+      color: #333;
+    }
+
+    div.spubox span.tooltip {
+      display: none;
+    }
+
+    div.spubox:hover span.tooltip {
+      display: block;
+      position: absolute;
+      font-size: 80%;
+      color: #fff;
+      background-color: rgb(255, 140, 0);
+      width: 300px;
+      padding: 0px 5px;
+      border-radius: 3px;
+      z-index: 100;
+    }
+
+    .slick-next,
+    .slick-prev {
+      height: 20px;
+      width: 20px;
+      line-height: 0;
+      font-size: 0;
+      cursor: pointer;
+      background: 0 0;
+      color: transparent;
+      top: 50%;
+      transform: translate(0, -50%);
+      border: none;
+      outline: 0
+    }
+
+    .slick-next:focus,
+    .slick-next:hover,
+    .slick-prev:focus,
+    .slick-prev:hover {
+      outline: 0;
+      background: 0 0;
+      color: transparent
+    }
+
+    .slick-next:focus:before,
+    .slick-next:hover:before,
+    .slick-prev:focus:before,
+    .slick-prev:hover:before {
+      opacity: 1
+    }
+
+    .slick-next.slick-disabled:before,
+    .slick-prev.slick-disabled:before {
+      opacity: .25
+    }
+
+    .slick-next:before,
+    .slick-prev:before {
+      font-size: 20px;
+      line-height: 1;
+      color: #00558B;
+      opacity: .75
+    }
+    @media screen and (max-width: 715px) and (min-width: 495px) {
+       .slick-next {
+        right: 72px;
+        background-color:#fff !important;
+        position:fixed;
+        height:100%;
+      }
+    }
+  </style>
+</body>
+
+</html>

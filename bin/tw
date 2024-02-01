@@ -1,0 +1,3 @@
+#!/bin/bash
+npm start -- tests/twitter.com-2.spec.ts
+npm start -- tests/twitter.com.spec.ts

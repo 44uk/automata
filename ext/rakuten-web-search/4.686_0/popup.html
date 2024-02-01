@@ -1,0 +1,72 @@
+<html>
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+	<link rel="stylesheet" type="text/css" href="css/popup.css" />
+	<link rel="stylesheet" type="text/css" href="css/userpoint.css" />
+	<link rel="stylesheet" type="text/css" href="css/rebatesCampaign.css" />
+</head>
+<!-- body全体のサイズ変更 変更前:width:384px -->
+<body style="width: 320px; margin: 0;font-size:16px;">
+
+	<!--This is a container div for suggest. This is directly put under root but positioned
+	using css classes-->
+	<div id="autoCompletePopUp" style="margin-left:8px"></div>
+
+	<div id="box">
+		<!-- search box -->
+		<div id="searchFormArea">
+			<form id="searchForm">
+				<div class="sggstInputWrap">
+					<input name="qt" id="searchBox" value="" type="text"
+						placeholder="Web検索でポイント" />
+				</div>
+				<div class="submit" id="stboxform-submit">
+					<button id="websearchBtn" class="searchBtn" type="button" value="">
+						<img src="img/btn_search.png" width="32" height="32" alt="" />
+					</button>
+
+					<!-- suggest div -->
+					<div id="sggstConfig" form="searchForm" input="searchBox"
+						col="toolbar" button="websearchBtn"
+						baseUrl="https://rdc-api-catalog-gateway-api.rakuten.co.jp/gsp-ac/autocomplete/v1/autocomplete.jp_websearch_page" suggestId="jp_websearch_ac_page_004"
+						encoding="utf-8" sendFormParam="1"></div>
+					<!-- / suggest div -->
+					<!-- suggest JS -->
+					<script language="JavaScript"
+						src="/js/suggest.js"></script>
+					<!-- /suggest JS -->
+				</div>
+				<div class="submit" id="stboxform-submit">
+					<button id="ichibaSearchBtn" class="searchBtn" type="button"
+						value="">
+						<img src="img/btn_ichiba.png" width="32" height="32" alt="" />
+					</button>
+				</div>
+			</form>
+			<form name="searchRequest" id="searchRequest" method="get" action=""
+				target=""></form>
+		</div>
+		<!-- /search box -->
+
+		<!-- kuchisu bar　-->
+		<div id="kuchisu_contents">
+		</div>
+		<!-- /kuchisu bar　-->
+
+		<!-- links for Ichiba -->
+		<div id="rakuten_contents">
+		</div>
+		
+	</div>
+
+	<div id="box2">
+	</div>
+
+	<!-- /links for Ichiba -->
+	<div id="footer_contents"></div>
+	
+	<script type="text/javascript" src="js/popup.js"></script>
+
+</body>
+
+</html>
