@@ -4,19 +4,19 @@ import { randomNumber, randomScroll, randomWait, removeCookies, scrollInto } fro
 const {
   DLSITE_ID,
   DLSITE_PW,
-} = process.env
+} = process.env;
 
-const BASE_URL = "https://www.dlsite.com/"
+const BASE_URL = "https://www.dlsite.com/";
 
 test.use({ baseURL: BASE_URL });
 
 test('click DLSite farm', async ({ browser }) => {
-  const context = await browser.newContext({})
-  context.addCookies([])
-  const page = await context.newPage()
+  const context = await browser.newContext({});
+  context.addCookies([]);
+  const page = await context.newPage();
 
-  await page.goto('/')
-  await randomScroll(page)
+  await page.goto('/');
+  await randomScroll(page);
 
   if(await page.$('//ul[@class="utility_menu"]/li[@class="type-login"]/a/i[@class="_loggedIn"][contains(@style, "display: none")]')) {
     await page.getByRole('link', { name: 'ログイン' }).click();

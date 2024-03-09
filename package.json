@@ -4,18 +4,20 @@
   "version": "1.0.0",
   "description": "",
   "dependencies": {
-    "@types/chance": "^1.1.6",
+    "@types/node": "^20.11.25",
     "axios": "^1.6.7",
     "chance": "^1.1.11",
-    "dotenv": "^16.4.1",
+    "dotenv": "^16.4.5",
     "lodash": "^4.17.21",
-    "playwright": "^1.41.1",
-    "playwright-core": "^1.41.1"
+    "playwright": "^1.42.1",
+    "playwright-core": "^1.42.1"
   },
   "devDependencies": {
-    "@playwright/test": "^1.41.1"
+    "@types/chance": "^1.1.6",
+    "@playwright/test": "^1.42.1"
   },
   "scripts": {
+    "clean-cookies": "bun clean-cookies.ts",
     "start": "playwright test"
   }
 }

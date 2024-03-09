@@ -46,7 +46,7 @@ export default defineConfig({
     trace: 'on-first-retry',
     video: 'on',
     launchOptions: {
-      slowMo: 250,
+      slowMo: 200,
       args: [],
       ignoreDefaultArgs: [
         '--disable-component-extensions-with-background-pages'

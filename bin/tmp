@@ -1,3 +1,2 @@
 #!/bin/bash
-npm start -- tests/www.sbisec.co.jp.spec.ts
-npm start -- tests/pointmall.rakuten.co.jp.spec.ts;
+bun run start -- tests/www.sbisec.co.jp.spec.ts

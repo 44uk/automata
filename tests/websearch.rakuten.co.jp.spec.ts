@@ -36,10 +36,13 @@ test('web search', async ({ browser, page: initialPage }) => {
 
     if(! page.url().match(/SimpleTop/)) {
       console.info("Try login.")
-      await page.fill('form input[name="username"]', '')
-      await page.type('form input[name="username"]', RAKUTEN_ID!, { delay: randomNumber(100, 200)})
-      await page.click('//form//div[@role="button"]/div/div[.="次へ"]')
-      await randomWait(page, 2)
+
+      if (await page.$('form input[name="username"]')) {
+        await page.fill('form input[name="username"]', '')
+        await page.type('form input[name="username"]', RAKUTEN_ID!, { delay: randomNumber(100, 200)})
+        await page.click('//form//div[@role="button"]/div/div[.="次へ"]')
+        await randomWait(page, 2)
+      }
 
       await page.waitForSelector('form input[name="password"]')
       await page.fill('form input[name="password"]', '')
@@ -54,7 +57,8 @@ test('web search', async ({ browser, page: initialPage }) => {
 
   const clickCount = parseInt(await page.$eval("[class='search-progress-current']", el => el.textContent) || "0")
   console.info("Click Count: %d", clickCount)
-  if(clickCount === 30) {
+  // if(clickCount === 30) {
+  if(clickCount === 5) {
     console.info("Already reached at Max Click Count.")
     return
   }
@@ -64,7 +68,7 @@ test('web search', async ({ browser, page: initialPage }) => {
     const results = await randomWordFromWikipedia("ja", 10).catch(() => [])
     if(results.length === 0) continue
     words = words.concat(results)
-      .filter((w: string) => 4 <= w.length && w.length <= 16)
+      .filter((w: string) => 4 <= w.length && w.length <= 12)
       .slice(0, 30)
     console.info("search keywords stacking... %d", words.length)
   }
@@ -73,7 +77,7 @@ test('web search', async ({ browser, page: initialPage }) => {
   await page.waitForSelector("#simple-top-search-form", { state: 'visible' });
   console.info("Search form found.");
 
-  // (await page.$('#clear-history'))?.click();
+  (await page.$('#clear-history'))?.click();
   await scrollInto(page, '#page');
   await randomWait(page);
 
@@ -93,7 +97,7 @@ test('web search', async ({ browser, page: initialPage }) => {
   await page.waitForSelector("#myForm input[name='qt']", { state: 'visible' });
   for(let idx = 0; idx < words.length; idx++) {
     // ５回の検索で終了する
-    if(idx > 1) { break; }
+    if(idx > 5) { break; }
 
     await page.fill("input[name='qt']", '');
     await page.type("input[name='qt']", words[idx], { delay: randomNumber(100, 300) });
@@ -163,42 +167,5 @@ test('web search', async ({ browser, page: initialPage }) => {
 
   await randomWait(page);
 
-  await removeCookies(await page.context(), [
-    '.a-mo.net',
-    '.ad-stir.com',
-    '.adnxs.com',
-    '.adsrvr.org',
-    '.amazon-adsystem.com',
-    '.analytics.yahoo.com',
-    '.bidr.io',
-    '.connatix.com',
-    '.doubleclick.net',
-    '.fout.jp',
-    '.gsspat.jp',
-    '.hb.yahoo.net',
-    '.impact-ad.jp',
-    '.intentiq.com',
-    '.ipredictive.com',
-    '.linkedin.com',
-    '.prebid.a-mo.net',
-    '.rubiconproject.com',
-    '.tapad.com',
-    '.yahoo.com',
-    'pixel.rubiconproject.com',
-    'xxxxxxxxxxxx',
-    '.adnxs.com',
-    '.ads.stickyadstv.com',
-    '.ads.yieldmo.com',
-    '.adtdp.com',
-    '.bluekai.com',
-    '.impact-ad.jp',
-    '.openx.net',
-    '.rlcdn.com',
-    '.smaato.net',
-    '.socdm.com',
-    '.yieldmo.com',
-    'auth.mercari.com',
-    'www.googleadservices.com',
-  ]);
   await page.context().storageState({ path: 'state.json' });
 });

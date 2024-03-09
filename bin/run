@@ -1,6 +1,7 @@
 #!/bin/bash
-npm start -- tests/www.adultblogranking.com.spec.ts;
-npm start -- tests/www.sokmil.com.spec.ts;
-npm start -- tests/dlsite.com.spec.ts;
-npm start -- tests/websearch.rakuten.co.jp.spec.ts;
-npm start -- tests/pointmall.rakuten.co.jp.spec.ts;
+bun run clean-cookies;
+bun run start -- tests/www.adultblogranking.com.spec.ts;
+bun run start -- tests/www.sokmil.com.spec.ts;
+bun run start -- tests/dlsite.com.spec.ts;
+bun run start -- tests/websearch.rakuten.co.jp.spec.ts;
+bun run start -- tests/pointmall.rakuten.co.jp.spec.ts;

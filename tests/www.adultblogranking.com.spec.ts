@@ -65,37 +65,12 @@ test('play roulette', async ({ browser }) => {
     await page.click(".roulette .new");
     console.info("Run roulette!");
     await page.waitForTimeout(1000 * 10);
+    console.info("Maybe done.");
   } else {
     console.info("Already Done today.");
   }
 
   await randomWait(page);
 
-  await removeCookies(await page.context(), [
-    '.a-mo.net',
-    '.ad-stir.com',
-    '.adnxs.com',
-    '.adsrvr.org',
-    '.amazon-adsystem.com',
-    '.analytics.yahoo.com',
-    '.bidr.io',
-    '.connatix.com',
-    '.doubleclick.net',
-    '.fout.jp',
-    '.gsspat.jp',
-    '.hb.yahoo.net',
-    '.impact-ad.jp',
-    '.intentiq.com',
-    '.ipredictive.com',
-    '.linkedin.com',
-    '.prebid.a-mo.net',
-    '.rubiconproject.com',
-    '.tapad.com',
-    '.yahoo.com',
-    'pixel.rubiconproject.com',
-    'xxxxxxxxxxxx',
-    'xxxxxxxxxxxx',
-    'xxxxxxxxxxxx',
-  ]);
   await page.context().storageState({ path: 'state.json' });
 });
