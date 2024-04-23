@@ -1,5 +1,5 @@
-import { test, expect } from '@playwright/test';
-import { downScroll, randomNumber, randomScroll, randomWait } from '../util';
+import { test, expect } from "@playwright/test";
+import { downScroll, randomNumber, randomScroll, randomWait } from "../util";
 
 const BASE_URL = "https://twitter.com";
 
@@ -11,32 +11,32 @@ test.setTimeout(60 * 60 * 1000);
 // const PASSWORD = 'mhr28hua';
 // const USERNAME = 'KakusanShoujo_A';
 // const PASSWORD = '@TWkur37koa';
-const USERNAME = '_maid_h_';
-const PASSWORD = '@TWkur37koa';
+const USERNAME = "_maid_h_";
+const PASSWORD = "@TWkur37koa";
 
-test('automate RT/Fav', async ({ browser }) => {
+test("automate RT/Fav", async ({ browser }) => {
   const context = await browser.newContext({
-    storageState: `state-${USERNAME}.json`
-  })
-  const page = await context.newPage()
+    storageState: `state-${USERNAME}.json`,
+  });
+  const page = await context.newPage();
 
   // await page.goto(`/search?q=from%3Agngn60%20filter%3Anativeretweets&src=typed_query&f=live`);
   await page.goto(`/`);
-  await page.waitForLoadState('load');
+  await page.waitForLoadState("load");
 
-  if(await page.getByTestId('loginButton').isVisible()) {
-    console.debug('Login...')
+  if (await page.getByTestId("loginButton").isVisible()) {
+    console.debug("Login...");
     // SignIn
-    await page.getByTestId('loginButton').click();
+    await page.getByTestId("loginButton").click();
     page.waitForTimeout(1000);
 
-    await page.getByLabel('電話番号/メールアドレス/ユーザー名').type(USERNAME, { delay: randomNumber(50, 100) });
+    await page.getByLabel("電話番号/メールアドレス/ユーザー名").type(USERNAME, { delay: randomNumber(50, 100) });
     page.waitForTimeout(1000);
-    await page.getByLabel('電話番号/メールアドレス/ユーザー名').press('Enter');
+    await page.getByLabel("電話番号/メールアドレス/ユーザー名").press("Enter");
 
-    await page.getByLabel('パスワード', { exact: true }).type(PASSWORD, { delay: randomNumber(50, 100) });
+    await page.getByLabel("パスワード", { exact: true }).type(PASSWORD, { delay: randomNumber(50, 100) });
     page.waitForTimeout(1000);
-    await page.getByLabel('パスワード', { exact: true }).press('Enter');
+    await page.getByLabel("パスワード", { exact: true }).press("Enter");
     // await page.getByLabel('ログイン').click();
 
     page.waitForTimeout(2000);
@@ -46,12 +46,12 @@ test('automate RT/Fav', async ({ browser }) => {
     await page.context().storageState({ path: `state-${USERNAME}.json` });
   } else {
     expect(page.url()).toMatch(new RegExp(USERNAME));
-    console.debug('Already Logged in.');
+    console.debug("Already Logged in.");
   }
-  console.debug('Starting...');
+  console.debug("Starting...");
 
   await page.goto(`/${USERNAME}`);
-  await page.waitForLoadState('load');
+  await page.waitForLoadState("load");
 
   // https://qiita.com/ryo_hisano/items/9f15ae87d691d497bc17
 
@@ -65,18 +65,29 @@ test('automate RT/Fav', async ({ browser }) => {
 
       await page.waitForSelector('//div[@data-testid="cellInnerDiv"]');
 
-      for(let i = 0; i < 10; i++) {
-        console.debug('Try to delete Tweet.')
+      for (let i = 0; i < 10; i++) {
+        console.debug("Try to delete Tweet.");
         await downScroll(page, { try: 3 });
 
-        await page.getByTestId('caret').last().click({ timeout: 1000 }).catch(_ => false);
+        await page
+          .getByTestId("caret")
+          .last()
+          .click({ timeout: 1000 })
+          .catch((_) => false);
         await page.waitForTimeout(300);
-        const del = await page.getByTestId('Dropdown').locator('span[.="削除"]').click({ timeout: 1000, force: true }).catch(_ => false);
+        const del = await page
+          .getByTestId("Dropdown")
+          .locator('span[.="削除"]')
+          .click({ timeout: 1000, force: true })
+          .catch((_) => false);
         await page.waitForTimeout(200);
-        if(del === false) {
+        if (del === false) {
           continue;
         }
-        await page.getByTestId('confirmationSheetConfirm').click({ timeout: 1000 }).catch(_ => false);
+        await page
+          .getByTestId("confirmationSheetConfirm")
+          .click({ timeout: 1000 })
+          .catch((_) => false);
         await page.waitForTimeout(200);
 
         // console.debug('Try to unFavorite.')
@@ -96,15 +107,15 @@ test('automate RT/Fav', async ({ browser }) => {
       await randomScroll(page);
 
       counter--;
-      await page.reload({})
-    } catch(e) {
+      await page.reload({});
+    } catch (e) {
       console.debug(e);
       // await page.goto(`/search?q=from%3Agngn60%20filter%3Anativeretweets&src=typed_query&f=live`);
       await page.goto(`/${USERNAME}/likes`);
       expect(page.url()).toMatch(new RegExp(USERNAME));
-      await page.waitForLoadState('load');
+      await page.waitForLoadState("load");
     } finally {
-      console.debug('Go next.');
+      console.debug("Go next.");
     }
   }
 

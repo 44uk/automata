@@ -1,94 +1,97 @@
-import { expect, test } from '@playwright/test';
-import Chance from 'chance'
-import { randomNumber, randomScroll, randomWait, scrollInto } from '../util';
+import { expect, test } from "@playwright/test";
+import Chance from "chance";
+import { randomNumber, randomScroll, randomWait, scrollInto } from "../util";
 
-const {
-  RAKUTEN_ID,
-  RAKUTEN_PW,
-} = process.env
+const { RAKUTEN_ID, RAKUTEN_PW } = process.env;
 
-const BASE_URL = "https://pointmall.rakuten.co.jp"
+const BASE_URL = "https://pointmall.rakuten.co.jp";
 
 test.use({ baseURL: BASE_URL });
 
-test('pointmall', async ({ browser }) => {
+test("pointmall", async ({ browser }) => {
   const context = await browser.newContext({
-    locale: 'ja'
-  })
-  context.addCookies([])
-  const page = await context.newPage()
+    locale: "ja",
+  });
+  context.addCookies([]);
+  const page = await context.newPage();
 
-  await page.goto('/')
+  await page.goto("/");
 
+  ("_karte-temp-close__5p7a_ _krt-icon-close07__5p7a_ karte-close _karte-temp-hover__5p7a_");
 
-  '_karte-temp-close__5p7a_ _krt-icon-close07__5p7a_ karte-close _karte-temp-hover__5p7a_'
-
-  await randomScroll(page)
+  await randomScroll(page);
 
   // オーバーレイを閉じる
-  if(await page.$('//button[@type="button"]/i[@aria-label="閉じる"]')) {
-    await page.click('//button[@type="button"]/i[@aria-label="閉じる"]', { delay: 1000 });
+  if (await page.$('//button[@type="button"]/i[@aria-label="閉じる"]')) {
+    await page.click('//button[@type="button"]/i[@aria-label="閉じる"]', {
+      delay: 1000,
+    });
   }
 
-  if(await page.$('#header__login')) {
-    await page.click('//li[@id="header__login"]/a[.="ログイン"]')
+  if (await page.$("#header__login")) {
+    await page.click('//li[@id="header__login"]/a[.="ログイン"]');
 
-    if(/authorize/.test(page.url())) {
-      await expect(page).toHaveURL(/authorize/)
+    if (/authorize/.test(page.url())) {
+      await expect(page).toHaveURL(/authorize/);
 
-      await page.type('form input[name="username"]', RAKUTEN_ID!, { delay: randomNumber(100, 300)})
-      await page.click('//form//div[@role="button"]/div/div[.="次へ"]')
-      await randomWait(page, 2)
+      await page.type('form input[name="username"]', RAKUTEN_ID!, {
+        delay: randomNumber(100, 300),
+      });
+      await page.click('//form//div[@role="button"]/div/div[.="次へ"]');
+      await randomWait(page, 2);
 
-      await page.waitForSelector('form input[name="password"]')
-      await page.type('form input[name="password"]', RAKUTEN_PW!, { delay: randomNumber(100, 300)})
-      await page.click('//form//div[@role="button"]/div/div[.="ログイン"]')
-      await randomWait(page, 3)
+      await page.waitForSelector('form input[name="password"]');
+      await page.type('form input[name="password"]', RAKUTEN_PW!, {
+        delay: randomNumber(100, 300),
+      });
+      await page.click('//form//div[@role="button"]/div/div[.="ログイン"]');
+      await randomWait(page, 3);
     }
 
-    await randomScroll(page)
-    await expect(page).toHaveURL(/pointmall\.rakuten\.co\.jp/)
+    await randomScroll(page);
+    await expect(page).toHaveURL(/pointmall\.rakuten\.co\.jp/);
   }
-  await page.goto('/')
+  await page.goto("/");
 
   // メール
   try {
-    console.debug('Start Mail')
-    await page.getByText('メールで貯める').click();
-    await page.getByRole('link', { name: /メールボックス/, includeHidden: true }).click();
+    console.debug("Start Mail");
+    await page.getByText("メールで貯める").click();
+    await page.getByRole("link", { name: /メールボックス/, includeHidden: true }).click();
 
-    if(/session\/upgrade/.test(page.url())) {
-      await expect(page).toHaveURL(/session\/upgrade/)
+    if (/session\/upgrade/.test(page.url())) {
+      await expect(page).toHaveURL(/session\/upgrade/);
 
       // await page.type('form input[name="username"]', RAKUTEN_ID!, { delay: randomNumber(100, 300)})
       // await page.click('//form//div[@role="button"]/div/div[.="次へ"]')
       // await randomWait(page, 2)
 
-      await page.waitForSelector('form input[name="password"]')
-      await page.type('form input[name="password"]', RAKUTEN_PW!, { delay: randomNumber(100, 300)})
-      await page.click('//form//div[@role="button"]/div/div[.="ログイン"]')
-      await randomWait(page, 3)
+      await page.waitForSelector('form input[name="password"]');
+      await page.type('form input[name="password"]', RAKUTEN_PW!, {
+        delay: randomNumber(100, 300),
+      });
+      await page.click('//form//div[@role="button"]/div/div[.="ログイン"]');
+      await randomWait(page, 3);
     }
     await expect(page).toHaveURL(/pointmail\.rakuten\.co\.jp\/box/);
     await randomScroll(page);
 
     // await page.getByText('未読').click();
-    await page.getByRole('link', { name: '未読' }).click();
+    await page.getByRole("link", { name: "未読" }).click();
     await randomScroll(page);
 
-    if(!(await page.$('//div[@class="mailboxBox"]/ul/li[contains(@class, "unread")][1]/div[@class="listCont"]/a'))) {
+    if (!(await page.$('//div[@class="mailboxBox"]/ul/li[contains(@class, "unread")][1]/div[@class="listCont"]/a'))) {
       throw "No unread mails.";
     }
 
     await page.click('//div[@class="mailboxBox"]/ul/li[contains(@class, "unread")][1]/div[@class="listCont"]/a');
-    for(let i = 5; i > 0; --i) {
-      await randomScroll(page)
+    for (let i = 5; i > 0; --i) {
+      await randomScroll(page);
       scrollInto(page, '//div[@id="mailContents"]//div[@class="mailbox"]//a[contains(@href, "pmrd")]');
-      const banner = (
-        await page.$('//div[@id="mailContents"]//div[@class="mailbox"]//*[@class="point_url"]//a')
-        || await page.$('//div[@id="mailContents"]//div[@class="mailbox"]//img[contains(@alt, "抽せん券をGET")]')
-      );
-      if(banner) {
+      const banner =
+        (await page.$('//div[@id="mailContents"]//div[@class="mailbox"]//*[@class="point_url"]//a')) ||
+        (await page.$('//div[@id="mailContents"]//div[@class="mailbox"]//img[contains(@alt, "抽せん券をGET")]'));
+      if (banner) {
         console.debug("Banner found!");
         await banner.click({ delay: 100 });
         await randomWait(page, 15);
@@ -108,56 +111,54 @@ test('pointmall', async ({ browser }) => {
     // if (!(error instanceof TimeoutError)) { throw error; }
     console.debug("Error! %o", error);
   } finally {
-    await page.goto('/');
+    await page.goto("/");
   }
 
   // ビンゴ
   try {
-    console.debug('Start BINGO');
-    await page.getByRole('link', { name: 'BINGO', exact: true }).click();
+    console.debug("Start BINGO");
+    await page.getByRole("link", { name: "BINGO", exact: true }).click();
     await expect(page).toHaveURL(/game\/bingo/);
     await randomWait(page, 3);
 
-    await page.click('#main .lp-header-btn', { delay: 100 })
+    await page.click("#main .lp-header-btn", { delay: 100 });
 
-    await randomScroll(page)
-    await page.waitForSelector("#bingocard", { state: 'visible' })
+    await randomScroll(page);
+    await page.waitForSelector("#bingocard", { state: "visible" });
 
-    if(await page.$('#video-add-modal')) {
-      await page.$eval('#video-add-modal-play-btn', el => (el as HTMLLIElement).click())
-      await page.waitForTimeout(60 * 1000)
+    if (await page.$("#video-add-modal")) {
+      await page.$eval("#video-add-modal-play-btn", (el) => (el as HTMLLIElement).click());
+      await page.waitForTimeout(60 * 1000);
     }
-    await page.waitForTimeout(60 * 1000)
+    await page.waitForTimeout(60 * 1000);
   } catch (error) {
     // if (!(error instanceof TimeoutError)) { throw error; }
-    console.debug("%o", error)
+    console.debug("%o", error);
   } finally {
-    await page.goto('/')
+    await page.goto("/");
   }
 
   // 抽選券のクリック
   try {
-    console.debug("Start Banner Clicking.")
-    await page.waitForSelector("#dream-lot", { state: 'visible' })
-    await randomScroll(page)
+    console.debug("Start Banner Clicking.");
+    await page.waitForSelector("#dream-lot", { state: "visible" });
+    await randomScroll(page);
 
-    const banners = await page.$$("#dream-lot .lot-list li a")
-    console.debug("Banners found: %d", banners.length)
-    for(let i = 0; i < banners.length; i++) {
-      const banner = banners[i]
-      await banner.click({ delay: 100 })
-      console.debug("Clicked index: %d", i)
-      await page.waitForTimeout(15 * 1000)
-      await page.bringToFront()
+    const banners = await page.$$("#dream-lot .lot-list li a");
+    console.debug("Banners found: %d", banners.length);
+    for (let i = 0; i < banners.length; i++) {
+      const banner = banners[i];
+      await banner.click({ delay: 100 });
+      console.debug("Clicked index: %d", i);
+      await page.waitForTimeout(15 * 1000);
+      await page.bringToFront();
     }
   } catch (error) {
     // if (!(error instanceof TimeoutError)) { throw error; }
-    console.debug("Error! %o", error)
+    console.debug("Error! %o", error);
   }
 
   // await page.waitForTimeout(30 * 1000)
-
-
 
   // // じゃんけん
   // await page.click('.side-mallkuji .janken-mallkuji');
@@ -173,8 +174,6 @@ test('pointmall', async ({ browser }) => {
   // // await page.click('#main-inner .scratch_yet', { delay: 150 });
 
   // await page.waitForTimeout(15 * 1000)
-
-
 
   // // スクラッチ
   // await page.click('.side-mallkuji .scratch-mallkuji');
@@ -196,8 +195,6 @@ test('pointmall', async ({ browser }) => {
 
   // await page.waitForTimeout(15 * 1000)
 
-
-
   // // モールくじ
   // await page.click('.side-mallkuji .gacha-mallkuji');
   // await expect(page).toHaveURL(/gacha/)
@@ -210,9 +207,8 @@ test('pointmall', async ({ browser }) => {
 
   // スロット
 
-
   // BINGO
 
-  await page.context().storageState({ path: 'state.json' });
+  await page.context().storageState({ path: "state.json" });
   // await page.waitForTimeout(5000 * 6)
 });

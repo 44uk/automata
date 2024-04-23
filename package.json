@@ -19,6 +19,10 @@
   },
   "scripts": {
     "clean-cookies": "bun clean-cookies.ts",
+    "fmt": "biome format --write tests/ lib/",
+    "lint": "biome lint tests/ lib/",
+    "check": "biome check tests/ lib/",
+    "autofix": "bun run check -- --apply & bun run fmt",
     "start": "playwright test"
   }
 }
