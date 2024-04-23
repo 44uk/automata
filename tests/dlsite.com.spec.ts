@@ -18,7 +18,10 @@ test('click DLSite farm', async ({ browser }) => {
   await page.goto('/');
   await randomScroll(page);
 
-  if(await page.$('//ul[@class="utility_menu"]/li[@class="type-login"]/a/i[@class="_loggedIn"][contains(@style, "display: none")]')) {
+  // if(await page.$('//ul[@class="utility_menu"]/li[@class="type-login"]/a/i[@class="_loggedIn"][contains(@style, "display: none")]')) {
+  const isNotLoggedIn = await page.$('//div[@id="index2_header"]//ul[@class="utility_menu"]/li[@class="type-register _notLoggedIn"]')
+  if(isNotLoggedIn) {
+    console.info('Need to logg in.')
     await page.getByRole('link', { name: 'ログイン' }).click();
     await expect(page).toHaveURL(/login/);
 
@@ -26,6 +29,7 @@ test('click DLSite farm', async ({ browser }) => {
     await page.type("form input[name='password']", DLSITE_PW!, { delay: randomNumber(100, 300) });
     await page.getByRole('button', { name: 'ログイン' }).click()
   } else {
+    console.info('Already Logged in.')
     await page.getByRole('link', { name: 'マイページ' }).click();
   }
 

@@ -1,5 +1,6 @@
 #!/bin/bash
 bun run clean-cookies;
+bun run start -- tests/www.sbisec.co.jp.spec.ts
 bun run start -- tests/www.adultblogranking.com.spec.ts;
 bun run start -- tests/www.sokmil.com.spec.ts;
 bun run start -- tests/dlsite.com.spec.ts;

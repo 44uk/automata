@@ -47,10 +47,11 @@ test('web search', async ({ browser, page: initialPage }) => {
       await page.waitForSelector('form input[name="password"]')
       await page.fill('form input[name="password"]', '')
       await page.type('form input[name="password"]', RAKUTEN_PW!, { delay: randomNumber(100, 200)})
-      await page.click('//form//div[@role="button"]/div/div[.="ログイン"]')
+      await page.click('//form//div[@role="button"]/div/div[.="次へ"]')
       await randomWait(page, 2)
     }
     await expect(page).toHaveURL(/SimpleTop/)
+    await page.context().storageState({ path: 'state.json' });
   } else {
     console.info("Already logged in.")
   }
