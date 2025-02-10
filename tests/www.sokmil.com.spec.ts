@@ -1,5 +1,5 @@
 import { expect, test } from "@playwright/test";
-import { randomNumber, randomScroll, randomWait } from "../util";
+import { randomNumber, randomScroll, randomWait } from "../lib/helpers";
 
 const { SOKMIL_ID, SOKMIL_PW } = process.env;
 

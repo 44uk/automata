@@ -1,7 +1,7 @@
 import { expect, test } from "@playwright/test";
 import Chance from "chance";
 import { shuffle } from "lodash";
-import { randomNumber, randomScroll, randomWait, scrollInto } from "../util";
+import { randomNumber, randomScroll, randomWait, scrollInto } from "../lib/helpers";
 import randomWordFromWikipedia from "../lib/randomWordFromWikipedia";
 
 const { RAKUTEN_ID, RAKUTEN_PW } = process.env;
@@ -58,7 +58,7 @@ test("web kuji", async ({ browser }) => {
       "img[alt='楽天ラクマ']",
     ]);
 
-    for (let selBanner of selBanners) {
+    for (const selBanner of selBanners) {
       const $banner = await page.$(selBase + selBanner);
       if (!$banner) continue;
       await $banner.click();

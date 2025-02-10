@@ -32,10 +32,11 @@ export default defineConfig({
   /* Opt out of parallel tests on CI. */
   workers: process.env.CI ? 1 : undefined,
   /* Reporter to use. See https://playwright.dev/docs/test-reporters */
-  reporter: 'html',
+  // reporter: 'html',
+  reporter: 'line',
   /* Shared settings for all the projects below. See https://playwright.dev/docs/api/class-testoptions. */
   use: {
-    headless: false,
+    headless: !!process.env.CI,
     // storageState: 'storage.json',
     ignoreHTTPSErrors: true,
 
@@ -46,28 +47,29 @@ export default defineConfig({
     trace: 'on-first-retry',
     video: 'on',
     launchOptions: {
-      slowMo: 200,
+      slowMo: 250,
       args: [],
-      ignoreDefaultArgs: [
-        '--disable-component-extensions-with-background-pages'
-      ],
+      ignoreDefaultArgs: [],
     },
     contextOptions: {},
     locale: 'ja,en-US;q=0.7,en;q=0.3',
     userAgent: 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/113.0.0.0 Safari/537.36'
   },
 
-  timeout: 15 * 60 * 1000,
+  timeout: 10 * 60 * 1000,
 
   /* Configure projects for major browsers */
   projects: [
     { name: 'chromium', use: { ...devices['Desktop Chrome'],
       storageState: 'state.json',
       launchOptions: {
-        slowMo: 200,
+        slowMo: 250,
+        timeout: 15 * 60 * 1000,
         args: [
-          // '--incognito',
-          // '--disable-setuid-sandbox',
+          // "--disable-gpu",
+          // "--single-process",
+          '--incognito',
+          '--disable-setuid-sandbox',
           '--ignore-certificate-errors',
           '--ignore-urlfetcher-cert-requests',
           '--disable-remote-fonts',
@@ -78,10 +80,13 @@ export default defineConfig({
           '--no-default-browser-check',
           '--lang=ja,en',
           '--window-position=0,0',
-          '--window-size=1280,600',
+          '--window-size=800,600',
           `--disable-extensions-except=${extPath}`,
           `--load-extension=${extPath}`,
         ],
+        ignoreDefaultArgs: [
+          '--disable-component-extensions-with-background-pages'
+        ]
       }
     } },
     // { name: 'firefox', use: { ...devices['Desktop Firefox'],

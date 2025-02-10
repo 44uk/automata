@@ -1,3 +1,11 @@
 #!/bin/bash
-bun run start -- tests/twitter.com-2.spec.ts
-bun run start -- tests/twitter.com.spec.ts
+bun run start -- tests/x.com-unfollow-not-followed-back.spec.ts;
+bun run start -- tests/x.com.spec.ts;
+
+sleep 30
+bun run start -- tests/x.com-unfollow-not-followed-back.spec.ts;
+bun run start -- tests/x.com.spec.ts;
+
+# sleep 30
+# bun run start -- tests/x.com-unfollow-not-followed-back.spec.ts;
+# bun run start -- tests/x.com.spec.ts;

@@ -1,15 +1,26 @@
 import { expect, test } from "@playwright/test";
-import { randomScroll, randomNumber, randomWait, scrollInto, keepCookies, removeCookies } from "../util";
 import { Chance } from "chance";
+import UserAgents from "user-agents";
+
+import { keepCookies, randomNumber, randomScroll, randomWait, removeCookies, scrollInto } from "../lib/helpers";
 
 const { ADULTBLOGRANKING_ID, ADULTBLOGRANKING_PW } = process.env;
 
+const userAgent = new UserAgents({
+  deviceCategory: "desktop",
+}).toString();
 const baseURL = "http://www.adultblogranking.com";
 
-test.use({ baseURL });
+// test.use({ baseURL });
 
 test("play roulette", async ({ browser }) => {
-  const context = await browser.newContext({});
+  const context = await browser.newContext({
+    baseURL,
+    viewport: { width: 1280, height: 720 },
+    userAgent,
+    locale: "ja,en-US;q=0.7,en;q=0.3",
+    ignoreHTTPSErrors: true,
+  });
   context.addCookies([
     {
       name: "checkAge",
@@ -19,7 +30,7 @@ test("play roulette", async ({ browser }) => {
     },
   ]);
   const page = await context.newPage();
-  await page.goto("/");
+  await page.goto("/ranking/9900");
 
   // await page.goto('https://maid-h.com/');
   // await page.getByRole('button', { name: 'はい' }).click();
@@ -31,11 +42,12 @@ test("play roulette", async ({ browser }) => {
   // await page.getByRole('link', { name: 'ログイン' }).click();
   // await page.waitForTimeout(1000 * 10)
 
-  const categoryLinks = await page.locator('//div[contains(@class, "category")]//ul/li/a').all();
-  const chance = new Chance();
-  const index = chance.integer({ min: 1, max: categoryLinks.length }) - 1;
-  await categoryLinks[index].click();
-  await randomScroll(page);
+  // const categoryLinks = await page.locator('//div[contains(@class, "category")]//ul/li/a').all();
+  // const chance = new Chance();
+  // const index = chance.integer({ min: 1, max: categoryLinks.length }) - 1;
+  // await categoryLinks[index].click();
+  // await randomScroll(page, { try: 2 });
+    await randomScroll(page, { try: 5 });
 
   if (await page.getByRole("link", { name: "ログイン", exact: true }).isVisible()) {
     await page.getByRole("link", { name: "ログイン", exact: true }).click();
@@ -50,7 +62,7 @@ test("play roulette", async ({ browser }) => {
       delay: randomNumber(100, 200),
     });
     await page.press('input[name="pswd"]', "Enter");
-    await randomScroll(page);
+    await randomScroll(page, { try: 2 });
   } else {
     await page.locator("#svc-header").getByRole("link", { name: "マイページ" }).click();
   }
@@ -63,20 +75,34 @@ test("play roulette", async ({ browser }) => {
   // }
 
   await expect(page).toHaveURL(/my/);
-  await randomScroll(page);
-  await page.waitForSelector(".roulette");
+  await randomScroll(page, { try: 2 });
 
+  await page.waitForSelector(".roulette");
   if (await page.$(".roulette .new")) {
     await scrollInto(page, ".roulette");
     await page.click(".roulette .new");
     console.info("Run roulette!");
-    await page.waitForTimeout(1000 * 10);
+    await page.waitForTimeout(1000 * 8);
     console.info("Maybe done.");
   } else {
     console.info("Already Done today.");
   }
 
-  await randomWait(page);
+  if(process.env.PING) {
+    console.info("Start Pinging.");
+    await page.getByRole("link", { name: "更新情報(Ping)" }).click();
+    await page.waitForTimeout(1000);
+    await page.getByRole("button", { name: "Pingを送信する" }).click();
+    await page.waitForTimeout(4000);
+    await page.getByRole("button", { name: "閉じる" }).click();
+    console.info("Ping completed.");
+  }
+
+  await randomWait(page, 3);
+
+  await page.getByRole("link", { name: "ログアウト" }).click();
+
+  await randomWait(page, 2);
 
   await page.context().storageState({ path: "state.json" });
 });

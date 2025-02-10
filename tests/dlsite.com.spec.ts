@@ -1,5 +1,5 @@
 import { expect, test } from "@playwright/test";
-import { randomNumber, randomScroll, randomWait, removeCookies, scrollInto } from "../util";
+import { randomNumber, randomScroll, randomWait, removeCookies, scrollInto } from "../lib/helpers";
 
 const { DLSITE_ID, DLSITE_PW } = process.env;
 
@@ -15,9 +15,13 @@ test("click DLSite farm", async ({ browser }) => {
   await page.goto("/");
   await randomScroll(page);
 
-  // if(await page.$('//ul[@class="utility_menu"]/li[@class="type-login"]/a/i[@class="_loggedIn"][contains(@style, "display: none")]')) {
-  const isNotLoggedIn = await page.$('//div[@id="index2_header"]//ul[@class="utility_menu"]/li[@class="type-register _notLoggedIn"]');
-  if (isNotLoggedIn) {
+  const $isLoggedIn = await page.$(
+    '//div[@id="index2_header"]//ul[@class="utility_menu"]/li[@class="type-register _notLoggedIn"][contains(@style, "display: none")]',
+  );
+  if ($isLoggedIn) {
+    console.info("Already Logged in.");
+    await page.goto("/home/mypage");
+  } else {
     console.info("Need to logg in.");
     await page.getByRole("link", { name: "ログイン" }).click();
     await expect(page).toHaveURL(/login/);
@@ -29,13 +33,15 @@ test("click DLSite farm", async ({ browser }) => {
       delay: randomNumber(100, 300),
     });
     await page.getByRole("button", { name: "ログイン" }).click();
-  } else {
-    console.info("Already Logged in.");
-    await page.getByRole("link", { name: "マイページ" }).click();
   }
 
   await expect(page).toHaveURL(/mypage/);
   await randomScroll(page);
+
+  const $modal = await page.$('//div[@class="modal_close"]');
+  if ($modal) {
+    await $modal.click();
+  }
 
   await scrollInto(page, '//div[@id="dl_farm"]');
   await page.click("#dl_farm .dl_farm_main");

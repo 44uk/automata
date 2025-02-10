@@ -1,12 +1,13 @@
 import { expect, test } from "@playwright/test";
-import Chance from "chance";
-import { randomNumber, randomScroll, randomWait, scrollInto } from "../util";
+import { randomNumber, randomScroll, randomWait, scrollInto } from "../lib/helpers";
 
 const { RAKUTEN_ID, RAKUTEN_PW } = process.env;
 
 const BASE_URL = "https://pointmall.rakuten.co.jp";
 
-test.use({ baseURL: BASE_URL });
+test.use({
+  baseURL: BASE_URL,
+});
 
 test("pointmall", async ({ browser }) => {
   const context = await browser.newContext({
@@ -17,15 +18,12 @@ test("pointmall", async ({ browser }) => {
 
   await page.goto("/");
 
-  ("_karte-temp-close__5p7a_ _krt-icon-close07__5p7a_ karte-close _karte-temp-hover__5p7a_");
-
-  await randomScroll(page);
+  // ("_karte-temp-close__5p7a_ _krt-icon-close07__5p7a_ karte-close _karte-temp-hover__5p7a_");
 
   // オーバーレイを閉じる
-  if (await page.$('//button[@type="button"]/i[@aria-label="閉じる"]')) {
-    await page.click('//button[@type="button"]/i[@aria-label="閉じる"]', {
-      delay: 1000,
-    });
+  await randomScroll(page, { try: 3 });
+  if ((await page.locator(".karte-close").count()) > 0) {
+    await page.locator(".karte-close").click({ delay: 1000 });
   }
 
   if (await page.$("#header__login")) {
@@ -34,14 +32,14 @@ test("pointmall", async ({ browser }) => {
     if (/authorize/.test(page.url())) {
       await expect(page).toHaveURL(/authorize/);
 
-      await page.type('form input[name="username"]', RAKUTEN_ID!, {
+      await page.locator('form input[name="username"]').pressSequentially(RAKUTEN_ID!, {
         delay: randomNumber(100, 300),
       });
       await page.click('//form//div[@role="button"]/div/div[.="次へ"]');
       await randomWait(page, 2);
 
       await page.waitForSelector('form input[name="password"]');
-      await page.type('form input[name="password"]', RAKUTEN_PW!, {
+      await page.locator('form input[name="password"]').pressSequentially(RAKUTEN_PW!, {
         delay: randomNumber(100, 300),
       });
       await page.click('//form//div[@role="button"]/div/div[.="ログイン"]');
@@ -53,7 +51,59 @@ test("pointmall", async ({ browser }) => {
   }
   await page.goto("/");
 
-  // メール
+  // ビンゴ
+  try {
+    console.debug("Start BINGO");
+    await page.getByRole("link", { name: "BINGO", exact: true }).click();
+    await expect(page).toHaveURL(/game\/bingo/);
+    await randomWait(page, 3);
+
+    await page.bringToFront();
+    const startButton = await page.getByRole("link", { name: "今すぐスタート！" });
+    console.debug("BINGO Clicked Start button");
+    console.debug(await startButton.count());
+    startButton.click({ timeout: 5000 });
+    // await page.click("#main .lp-header-btn", { delay: 100 });
+    await page.bringToFront();
+
+    await randomScroll(page);
+    await page.waitForSelector("#bingocard", { state: "visible" });
+
+    if (await page.$("#video-add-modal")) {
+      console.debug("BINGO Play Ad");
+      await page.$eval("#video-add-modal-play-btn", (el) => (el as HTMLLIElement).click());
+      await page.waitForTimeout(60 * 1000);
+    }
+    console.debug("Waiting for finish.");
+    await page.waitForTimeout(60 * 1000);
+    console.debug("BINGO Maybe finished.");
+  } catch (error) {
+    // if (!(error instanceof TimeoutError)) { throw error; }
+    console.debug("%o", error);
+  } finally {
+    await page.goto("/");
+  }
+
+  // 抽選券のクリック
+  try {
+    console.debug("Start Banner Clicking.");
+    await page.waitForSelector("#dream-lot", { state: "visible" });
+    await randomScroll(page);
+
+    const banners = await page.$$("#dream-lot .lot-list li a");
+    console.debug("Banners found: %d", banners.length);
+    for (let i = 0; i < banners.length; i++) {
+      const banner = banners[i];
+      await banner.click({ delay: 100 });
+      console.debug("Clicked index: %d", i);
+      await page.waitForTimeout(10 * 1000);
+      await page.bringToFront();
+    }
+  } catch (error) {
+    // if (!(error instanceof TimeoutError)) { throw error; }
+    console.debug("Error! %o", error);
+  }
+
   try {
     console.debug("Start Mail");
     await page.getByText("メールで貯める").click();
@@ -62,15 +112,15 @@ test("pointmall", async ({ browser }) => {
     if (/session\/upgrade/.test(page.url())) {
       await expect(page).toHaveURL(/session\/upgrade/);
 
-      // await page.type('form input[name="username"]', RAKUTEN_ID!, { delay: randomNumber(100, 300)})
+      // await page.locator('form input[name="username"]').pressSequentially(RAKUTEN_ID!, { delay: randomNumber(100, 300)})
       // await page.click('//form//div[@role="button"]/div/div[.="次へ"]')
       // await randomWait(page, 2)
 
       await page.waitForSelector('form input[name="password"]');
-      await page.type('form input[name="password"]', RAKUTEN_PW!, {
+      await page.locator('form input[name="password"]').pressSequentially(RAKUTEN_PW!, {
         delay: randomNumber(100, 300),
       });
-      await page.click('//form//div[@role="button"]/div/div[.="ログイン"]');
+      await page.click('//form//div[@role="button"]/div/div[.="次へ"]');
       await randomWait(page, 3);
     }
     await expect(page).toHaveURL(/pointmail\.rakuten\.co\.jp\/box/);
@@ -85,7 +135,7 @@ test("pointmall", async ({ browser }) => {
     }
 
     await page.click('//div[@class="mailboxBox"]/ul/li[contains(@class, "unread")][1]/div[@class="listCont"]/a');
-    for (let i = 5; i > 0; --i) {
+    for (let i = 12; i > 0; --i) {
       await randomScroll(page);
       scrollInto(page, '//div[@id="mailContents"]//div[@class="mailbox"]//a[contains(@href, "pmrd")]');
       const banner =
@@ -112,50 +162,6 @@ test("pointmall", async ({ browser }) => {
     console.debug("Error! %o", error);
   } finally {
     await page.goto("/");
-  }
-
-  // ビンゴ
-  try {
-    console.debug("Start BINGO");
-    await page.getByRole("link", { name: "BINGO", exact: true }).click();
-    await expect(page).toHaveURL(/game\/bingo/);
-    await randomWait(page, 3);
-
-    await page.click("#main .lp-header-btn", { delay: 100 });
-
-    await randomScroll(page);
-    await page.waitForSelector("#bingocard", { state: "visible" });
-
-    if (await page.$("#video-add-modal")) {
-      await page.$eval("#video-add-modal-play-btn", (el) => (el as HTMLLIElement).click());
-      await page.waitForTimeout(60 * 1000);
-    }
-    await page.waitForTimeout(60 * 1000);
-  } catch (error) {
-    // if (!(error instanceof TimeoutError)) { throw error; }
-    console.debug("%o", error);
-  } finally {
-    await page.goto("/");
-  }
-
-  // 抽選券のクリック
-  try {
-    console.debug("Start Banner Clicking.");
-    await page.waitForSelector("#dream-lot", { state: "visible" });
-    await randomScroll(page);
-
-    const banners = await page.$$("#dream-lot .lot-list li a");
-    console.debug("Banners found: %d", banners.length);
-    for (let i = 0; i < banners.length; i++) {
-      const banner = banners[i];
-      await banner.click({ delay: 100 });
-      console.debug("Clicked index: %d", i);
-      await page.waitForTimeout(15 * 1000);
-      await page.bringToFront();
-    }
-  } catch (error) {
-    // if (!(error instanceof TimeoutError)) { throw error; }
-    console.debug("Error! %o", error);
   }
 
   // await page.waitForTimeout(30 * 1000)

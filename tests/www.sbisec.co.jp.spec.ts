@@ -1,5 +1,5 @@
 import { expect, test } from "@playwright/test";
-import { randomNumber, randomScroll, randomWait, scrollInto } from "../util";
+import { randomNumber, randomScroll, randomWait, scrollInto } from "../lib/helpers";
 
 const { SBISEC_ID, SBISEC_PW, SBISEC_TR_PW } = process.env;
 
@@ -21,11 +21,11 @@ test("entry IPO", async ({ browser }) => {
     await scrollInto(page, '//h1[@id="logo"]');
   } else {
     await page.type("form input[name='user_id']", SBISEC_ID!, {
-      delay: randomNumber(100, 200),
+      delay: randomNumber(50, 100),
     });
-    await randomWait(page, 2);
+    await randomWait(page, 1);
     await page.type("form input[name='user_password']", SBISEC_PW!, {
-      delay: randomNumber(100, 200),
+      delay: randomNumber(50, 100),
     });
     await page.click("form input[type='submit']", { delay: 50 });
     await expect(page).toHaveURL(/ETGate/);

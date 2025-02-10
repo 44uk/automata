@@ -1,6 +1,6 @@
 import { expect, test } from "@playwright/test";
 import Chance from "chance";
-import { randomNumber, randomScroll, randomWait, removeCookies, scrollInto } from "../util";
+import { randomNumber, randomScroll, randomWait, removeCookies, scrollInto } from "../lib/helpers";
 import randomWordFromWikipedia from "../lib/randomWordFromWikipedia";
 
 const { RAKUTEN_ID, RAKUTEN_PW } = process.env;
@@ -57,7 +57,7 @@ test("web search", async ({ browser, page: initialPage }) => {
     console.info("Already logged in.");
   }
 
-  const clickCount = parseInt((await page.$eval("[class='search-progress-current']", (el) => el.textContent)) || "0");
+  const clickCount = Number.parseInt((await page.$eval("[class='search-progress-current']", (el) => el.textContent)) || "0");
   console.info("Click Count: %d", clickCount);
   // if(clickCount === 30) {
   if (clickCount === 5) {
