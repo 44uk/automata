@@ -7,12 +7,17 @@ const BASE_URL = "https://x.com";
 test.use({ baseURL: BASE_URL });
 test.setTimeout(3 * 60 * 60 * 1000);
 
-const USERNAME = "KakusanShoujo_A";
-const PASSWORD = "@TWkur37koa";
-
 test("automate RT/Fav", async ({ browser }) => {
+  const username = process.env.USERNAME;
+  const password = process.env.PASSWORD;
+  if (!username) {
+    throw new Error("USERNAME environment variable is required");
+  }
+  if (!password) {
+    throw new Error("PASSWORD environment variable is required");
+  }
   const context = await browser.newContext({
-    storageState: `state-${USERNAME}.json`,
+    storageState: `state-${username}.json`,
   });
   const page = await context.newPage();
 
@@ -21,20 +26,8 @@ test("automate RT/Fav", async ({ browser }) => {
 
   if (await page.getByTestId("loginButton").isVisible()) {
     console.debug("Login...");
-    await login(page, USERNAME, PASSWORD);
-    // // SignIn
-    // await page.getByTestId("loginButton").click();
-    // await randomWait(page);
-
-    // await page.getByLabel("電話番号/メールアドレス/ユーザー名").type(USERNAME, { delay: randomNumber(100, 200) });
-    // await randomWait(page);
-    // await page.getByLabel("電話番号/メールアドレス/ユーザー名").press("Enter");
-
-    // await page.getByLabel("パスワード", { exact: true }).type(PASSWORD, { delay: randomNumber(100, 200) });
-    // await randomWait(page);
-    // await page.getByLabel("パスワード", { exact: true }).press("Enter");
-
-    await page.context().storageState({ path: `state-${USERNAME}.json` });
+    await login(page, username, password);
+    await page.context().storageState({ path: `state-${username}.json` });
   } else {
     expect(page.url()).toMatch(/home/);
     console.debug("Already Logged in.");
@@ -150,7 +143,7 @@ test("automate RT/Fav", async ({ browser }) => {
 
   await page.waitForTimeout(3 * 1000);
   // await page.context().storageState({ path: "state.json" });
-  await page.context().storageState({ path: `state-${USERNAME}.json` });
+  await page.context().storageState({ path: `state-${username}.json` });
 });
 
 // test('test', async ({ page }) => {

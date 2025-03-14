@@ -3,16 +3,21 @@ import { downScroll, randomScroll, upScroll } from "../lib/helpers";
 import { login } from "../lib/x/helpers";
 
 const BASE_URL = "https://x.com";
+const WAVE_COUNT = 3;
 
 test.use({ baseURL: BASE_URL });
 
-const USERNAME = "KakusanShoujo_C";
-const PASSWORD = "@TWkur37koa";
-const WAVE_COUNT = 3;
-
 test("unfollow a not follow back user.", async ({ browser }) => {
+  const username = process.env.USERNAME;
+  const password = process.env.PASSWORD;
+  if (!username) {
+    throw new Error("USERNAME environment variable is required");
+  }
+  if (!password) {
+    throw new Error("PASSWORD environment variable is required");
+  }
   const context = await browser.newContext({
-    storageState: `state-${USERNAME}.json`,
+    storageState: `state-${username}.json`,
   });
   const page = await context.newPage();
 
@@ -21,8 +26,8 @@ test("unfollow a not follow back user.", async ({ browser }) => {
 
   if (await page.getByTestId("loginButton").isVisible()) {
     console.debug("Login...");
-    await login(page, USERNAME, PASSWORD);
-    await page.context().storageState({ path: `state-${USERNAME}.json` });
+    await login(page, username, password);
+    await page.context().storageState({ path: `state-${username}.json` });
   } else {
     expect(page.url()).toMatch(/followers/);
     console.debug("Already Logged in.");
@@ -62,5 +67,5 @@ test("unfollow a not follow back user.", async ({ browser }) => {
   }
 
   await page.waitForTimeout(250);
-  await page.context().storageState({ path: `state-${USERNAME}.json` });
+  await page.context().storageState({ path: `state-${username}.json` });
 });
