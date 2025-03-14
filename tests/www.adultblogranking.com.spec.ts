@@ -47,7 +47,7 @@ test("play roulette", async ({ browser }) => {
   // const index = chance.integer({ min: 1, max: categoryLinks.length }) - 1;
   // await categoryLinks[index].click();
   // await randomScroll(page, { try: 2 });
-    await randomScroll(page, { try: 5 });
+  await randomScroll(page, { try: 5 });
 
   if (await page.getByRole("link", { name: "ログイン", exact: true }).isVisible()) {
     await page.getByRole("link", { name: "ログイン", exact: true }).click();
@@ -88,9 +88,9 @@ test("play roulette", async ({ browser }) => {
     console.info("Already Done today.");
   }
 
-  if(process.env.PING) {
+  if (process.env.PING) {
     console.info("Start Pinging.");
-    await page.getByRole("link", { name: "更新情報(Ping)" }).click();
+    await page.goto("/my/ping");
     await page.waitForTimeout(1000);
     await page.getByRole("button", { name: "Pingを送信する" }).click();
     await page.waitForTimeout(4000);

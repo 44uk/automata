@@ -38,7 +38,8 @@ test("entry IPO", async ({ browser }) => {
   await page.click('//*[@id="navi02P"]//a[.="IPO・PO"]');
   await expect(page).toHaveURL(/dir=ipo/);
 
-  await page.click('//*[@id="main"]//img[@alt="新規上場株式ブックビルディング / 購入意思表示"]');
+  await page.locator('//*[@id="main"]').getByRole("link", { name: "新規上場株式ブックビルディング / 購入意思表示" }).click();
+  // await page.click('//*[@id="main"]//img[@alt="新規上場株式ブックビルディング / 購入意思表示"]');
   await expect(page).toHaveURL(/switchnaviMain/);
 
   await randomScroll(page);
