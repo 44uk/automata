@@ -26,4 +26,4 @@ bun run start -- tests/www.adultblogranking.com.spec.ts;
 
 bun run start -- tests/websearch.rakuten.co.jp.spec.ts;
 
-bun run start -- tests/pointmall.rakuten.co.jp.spec.ts;
+# bun run start -- tests/pointmall.rakuten.co.jp.spec.ts;

@@ -3,7 +3,7 @@ import { downScroll, randomScroll, upScroll } from "../lib/helpers";
 import { login } from "../lib/x/helpers";
 
 const BASE_URL = "https://x.com";
-const WAVE_COUNT = 3;
+const WAVE_COUNT = 5;
 
 test.use({ baseURL: BASE_URL });
 
@@ -33,24 +33,38 @@ test("unfollow a not follow back user.", async ({ browser }) => {
     console.debug("Already Logged in.");
   }
   await page.goto("/followers");
-  await page.setViewportSize({ width: 960, height: 3200 });
-  await downScroll(page, { try: 10 });
+  await page.setViewportSize({ width: 960, height: 800 });
+  await downScroll(page, { try: 8 });
 
   for (let i = 1; i <= WAVE_COUNT; i++) {
-    const userCellsLoc = await page.locator('//div[@data-testid="cellInnerDiv"][(div//button[contains(@aria-label, "フォローバック")])]');
+    // const userCellsLoc = await page.locator('//div[@data-testid="cellInnerDiv"][(div//button[contains(@aria-label, "フォローバック")])]');
+    const userCellsLoc = await page.locator('//div[@data-testid="cellInnerDiv"]');
     console.debug(`Try to block a not follow back users. ${await userCellsLoc.count()}`);
-    for (const userCell of await userCellsLoc.all()) {
-      // const suspiciousKeywords = ['お金配り', 'せふ'];
-      // const suspiciousUserLocator = `*[contains(text(), '${suspiciousKeywords.join("') or contains(text(), '")}')]`;
-      // console.debug(`suspiciousUserLocator: ${suspiciousUserLocator}`);
-      // if( await userCellLoc.locator(suspiciousUserLocator).count() === 0) {
-      //   console.debug(`This may be safe user. (${i})`);
-      //   continue;
-      // }
 
+    const suspiciousKeywords = ['お金配り', 'せふ', '独身'];
+    const suspiciousUserLocator = `xpath=div//*[contains(text(), '${suspiciousKeywords.join("') or contains(text(), '")}')]`;
+    console.debug(`suspiciousUserLocator: ${suspiciousUserLocator}`);
+
+    // for (const userCell of await userCellsLoc.all()) {
+    //   if( await userCell.locator(suspiciousUserLocator).count() === 0) {
+    //     continue;
+    //   }
+    //   console.debug(`Detect Suspicious user.`);
+    //   await userCell.getByLabel("もっと見る").last().click({ force: true });
+    //   await page.waitForTimeout(200);
+    //   await page.getByTestId("Dropdown").getByTestId("mute").last().click({ force: true });
+    //   await page.waitForTimeout(200);
+    //   // await page.getByTestId("Dropdown").getByTestId("block").last().click({ force: true });
+    //   // await page.getByTestId("confirmationSheetConfirm").click({ force: true });
+    //   console.debug("Muted not follow back user.");
+    //   await page.waitForTimeout(1000 * 2);
+    // }
+
+    for (const userCell of await userCellsLoc.all()) {
       await userCell.getByLabel("もっと見る").last().click({ force: true });
+      await page.waitForTimeout(200);
       await page.getByTestId("Dropdown").getByTestId("block").last().click({ force: true });
-      await page.waitForTimeout(400);
+      await page.waitForTimeout(200);
       await page.getByTestId("confirmationSheetConfirm").click({ force: true });
       console.debug("Blocked not follow back user.");
       await page.waitForTimeout(1000 * 2);

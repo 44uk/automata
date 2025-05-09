@@ -18,6 +18,7 @@
     "@types/user-agents": "^1.0.4"
   },
   "scripts": {
+    "postinstall": "npx playwright install chromium",
     "clean-cookies": "bun clean-cookies.ts",
     "check": "biome check lib/ tests/",
     "autofix": "npm run check -- --fix",
