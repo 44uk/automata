@@ -63,7 +63,7 @@ export default defineConfig({
     { name: 'chromium', use: { ...devices['Desktop Chrome'],
       storageState: 'state.json',
       launchOptions: {
-        slowMo: 250,
+        slowMo: 200,
         timeout: 15 * 60 * 1000,
         args: [
           // "--disable-gpu",

@@ -4,17 +4,17 @@
   "version": "1.0.0",
   "description": "",
   "dependencies": {
-    "@playwright/test": "^1.51.0",
-    "axios": "^1.8.3",
+    "@playwright/test": "^1.52.0",
+    "axios": "^1.9.0",
     "chance": "^1.1.12",
-    "dotenv": "^16.4.7",
+    "dotenv": "^16.5.0",
     "lodash": "^4.17.21",
-    "user-agents": "^1.1.478"
+    "user-agents": "^1.1.541"
   },
   "devDependencies": {
     "@biomejs/biome": "^1.9.4",
     "@types/chance": "^1.1.6",
-    "@types/node": "^22.13.10",
+    "@types/node": "^22.15.18",
     "@types/user-agents": "^1.0.4"
   },
   "scripts": {

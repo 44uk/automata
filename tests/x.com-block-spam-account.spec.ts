@@ -41,7 +41,7 @@ test("unfollow a not follow back user.", async ({ browser }) => {
     const userCellsLoc = await page.locator('//div[@data-testid="cellInnerDiv"]');
     console.debug(`Try to block a not follow back users. ${await userCellsLoc.count()}`);
 
-    const suspiciousKeywords = ['お金配り', 'せふ', '独身'];
+    const suspiciousKeywords = ["お金配り", "せふ", "独身"];
     const suspiciousUserLocator = `xpath=div//*[contains(text(), '${suspiciousKeywords.join("') or contains(text(), '")}')]`;
     console.debug(`suspiciousUserLocator: ${suspiciousUserLocator}`);
 
