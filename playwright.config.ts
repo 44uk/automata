@@ -79,7 +79,7 @@ export default defineConfig({
           '--lang=ja,en',
           '--mute-audio',
           '--no-default-browser-check',
-          // '--no-sandbox',
+          '--no-sandbox',
           '--propagate-iph-for-testing',
           '--window-position=10,10',
           '--window-size=800,600',

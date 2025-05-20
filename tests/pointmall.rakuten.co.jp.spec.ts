@@ -50,24 +50,24 @@ test("pointmall", async ({ browser }) => {
   await page.goto("/");
 
   // 抽選券のクリック
-  // try {
-  //   console.debug("Start Banner Clicking.");
-  //   await page.waitForSelector(".dreamkuji-list", { state: "visible" });
-  //   await randomScroll(page);
+  try {
+    console.debug("Start Banner Clicking.");
+    await page.waitForSelector(".dreamkuji-list", { state: "visible" });
+    await randomScroll(page);
 
-  //   const banners = await page.$$(".dreamkuji-list > .dreamkuji-item > a");
-  //   console.debug("Banners found: %d", banners.length);
-  //   for (let i = 0; i < banners.length; i++) {
-  //     const banner = banners[i];
-  //     await banner.click({ delay: 100 });
-  //     console.debug("Clicked index: %d", i);
-  //     await page.waitForTimeout(10 * 1000);
-  //     await page.bringToFront();
-  //   }
-  // } catch (error) {
-  //   // if (!(error instanceof TimeoutError)) { throw error; }
-  //   console.debug("Error! %o", error);
-  // }
+    const banners = await page.$$(".dreamkuji-list > .dreamkuji-item > a");
+    console.debug("Banners found: %d", banners.length);
+    for (let i = 0; i < banners.length; i++) {
+      const banner = banners[i];
+      await banner.click({ delay: 100 });
+      console.debug("Clicked index: %d", i);
+      await page.waitForTimeout(10 * 1000);
+      await page.bringToFront();
+    }
+  } catch (error) {
+    // if (!(error instanceof TimeoutError)) { throw error; }
+    console.debug("Error! %o", error);
+  }
 
   try {
     console.debug("Start Mail");

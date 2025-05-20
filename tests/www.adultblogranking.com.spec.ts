@@ -1,52 +1,29 @@
 import { expect, test } from "@playwright/test";
-import { Chance } from "chance";
 import UserAgents from "user-agents";
-
-import { keepCookies, randomNumber, randomScroll, randomWait, removeCookies, scrollInto } from "../lib/helpers";
+import { randomNumber, randomScroll, randomWait, scrollInto } from "../lib/helpers";
 
 const { ADULTBLOGRANKING_ID, ADULTBLOGRANKING_PW } = process.env;
+
+const BASE_URL = "http://www.adultblogranking.com";
+
+test.use({ baseURL: BASE_URL });
 
 const userAgent = new UserAgents({
   deviceCategory: "desktop",
 }).toString();
-const baseURL = "http://www.adultblogranking.com";
-
-// test.use({ baseURL });
 
 test("play roulette", async ({ browser }) => {
   const context = await browser.newContext({
-    baseURL,
-    viewport: { width: 1280, height: 720 },
+    viewport: { width: 1080, height: 720 },
     userAgent,
     locale: "ja,en-US;q=0.7,en;q=0.3",
     ignoreHTTPSErrors: true,
   });
-  context.addCookies([
-    {
-      name: "checkAge",
-      value: "1",
-      domain: "www.adultblogranking.com",
-      path: "/",
-    },
-  ]);
+  context.addCookies([{ name: "checkAge", value: "1", domain: "www.adultblogranking.com", path: "/" }]);
   const page = await context.newPage();
+
   await page.goto("/ranking/9900");
-
-  // await page.goto('https://maid-h.com/');
-  // await page.getByRole('button', { name: 'はい' }).click();
-  // await page.waitForTimeout(1000 * 10)
-  // await page.getByRole('link', { name: 'アダルトブログランキング', exact: true }).click();
-  // await page.waitForTimeout(1000 * 10)
-  // await page.getByRole('link', { name: 'は い' }).click();
-  // await page.waitForTimeout(1000 * 10)
-  // await page.getByRole('link', { name: 'ログイン' }).click();
-  // await page.waitForTimeout(1000 * 10)
-
-  // const categoryLinks = await page.locator('//div[contains(@class, "category")]//ul/li/a').all();
-  // const chance = new Chance();
-  // const index = chance.integer({ min: 1, max: categoryLinks.length }) - 1;
-  // await categoryLinks[index].click();
-  // await randomScroll(page, { try: 2 });
+  await page.waitForLoadState("load");
   await randomScroll(page, { try: 5 });
 
   if (await page.getByRole("link", { name: "ログイン", exact: true }).isVisible()) {
