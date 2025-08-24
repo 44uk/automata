@@ -1,5 +1,5 @@
 import { defineConfig, devices } from '@playwright/test';
-import fs from 'fs';
+import fs from 'node:fs';
 
 if (!fs.existsSync('./state.json')) {
   fs.writeFileSync('./state.json', '{}');
@@ -68,7 +68,8 @@ export default defineConfig({
         args: [
           '--blink-settings=imagesEnabled=false',
           '--disable-dev-shm-usage',
-          '--disable-features=Translate',
+          // HTTPSへリダイレクト？するので使わない
+          // '--disable-features=Translate',
           '--disable-remote-fonts',
           '--disable-setuid-sandbox',
           '--disk-cache-size=1',
@@ -85,7 +86,6 @@ export default defineConfig({
           '--window-size=800,600',
           `--disable-extensions-except=${extPath}`,
           `--load-extension=${extPath}`,
-          // '--disable-gl-drawing-for-tests',
         ],
         ignoreDefaultArgs: [
           '--disable-component-extensions-with-background-pages'
