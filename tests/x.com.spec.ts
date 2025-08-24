@@ -1,5 +1,5 @@
 import { expect, test } from "@playwright/test";
-import { randomNumber, randomScroll, randomWait } from "../lib/helpers";
+import { naturalScroll, naturalWait, randomNumber, randomScroll, randomWait } from "../lib/helpers";
 import { login } from "../lib/x/helpers";
 
 const BASE_URL = "https://x.com";
@@ -36,15 +36,15 @@ test("automate RT/Fav", async ({ browser }) => {
   // https://qiita.com/ryo_hisano/items/9f15ae87d691d497bc17
 
   let counter = 20;
-  await randomWait(page);
+  await naturalWait(page);
   while (counter > 0) {
     // リプライする：27
     // リプライに投稿者が返信/いいね/リツイートする：75
     try {
-      await randomScroll(page);
+      await naturalScroll(page, "down");
 
       await page.waitForSelector('//div[@data-testid="cellInnerDiv"]');
-      await randomWait(page, 1);
+      await naturalWait(page);
       // console.debug("Find video tweet.");
       // await page.waitForSelector('//div[@data-testid="cellInnerDiv"][div//div[@data-testid="videoComponent"]]//article');
       await page.waitForSelector('//div[@data-testid="cellInnerDiv"]//article');
@@ -56,7 +56,7 @@ test("automate RT/Fav", async ({ browser }) => {
       // );
       const tweetsLoc = await page.locator('//div[@data-testid="cellInnerDiv"]//article//time');
       tweetsLoc.last().click({ force: true });
-      await randomWait(page, 1);
+      await naturalWait(page);
       expect(page.url()).toMatch(/status\/\d+/);
 
       // フォロー済みであるか
@@ -72,9 +72,9 @@ test("automate RT/Fav", async ({ browser }) => {
       // ツイートに2分間とどまる：11
       if ([0, 1, 2, 3].includes(randomNumber(0, 9))) {
         console.debug("Waiting for 2min.");
-        await randomScroll(page, { try: 10 });
+        await naturalScroll(page, "down");
         await page.waitForTimeout(2 * 60 * 1000);
-        await randomScroll(page, { try: 10 });
+        await naturalScroll(page, "up");
       }
 
       // いいね：0.5
@@ -83,7 +83,7 @@ test("automate RT/Fav", async ({ browser }) => {
       } else {
         console.debug("Try to Favored.");
         await page.getByTestId("like").first().click();
-        await randomWait(page, 3);
+        await naturalWait(page);
       }
 
       // リツイート：1
@@ -93,10 +93,10 @@ test("automate RT/Fav", async ({ browser }) => {
         console.debug("Try to Re-post.");
         if (randomNumber(1, 6) === 1) {
           await page.getByTestId("retweet").first().click();
-          await randomWait(page, 2);
+          await naturalWait(page);
           console.debug("Try to Re-post confirm.");
           await page.getByTestId("retweetConfirm").click();
-          await randomWait(page, 3);
+          await naturalWait(page);
         } else {
           console.debug("Skip to Re-post.");
         }
@@ -114,7 +114,7 @@ test("automate RT/Fav", async ({ browser }) => {
       // ツイートに「いいね」かリプライし、投稿者のプロフィールを見に行く:12
       console.debug("Try to open User Profile.");
       await page.getByTestId("User-Name").locator("//a").first().click();
-      await randomWait(page, 1);
+      await naturalWait(page);
       expect(page.url()).toMatch(/[0-9a-zA-Z_]{1,15}/);
 
       // 戻る
