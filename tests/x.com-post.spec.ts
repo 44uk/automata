@@ -1,6 +1,6 @@
 import path from "node:path";
 import { expect, test } from "@playwright/test";
-import { randomScroll, upScroll } from "../lib/helpers";
+import { upScroll } from "../lib/helpers";
 import { login } from "../lib/x/helpers";
 
 const BASE_URL = "https://x.com";

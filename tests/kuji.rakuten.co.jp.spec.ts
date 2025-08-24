@@ -1,8 +1,6 @@
-import { expect, test } from "@playwright/test";
-import Chance from "chance";
+import { test } from "@playwright/test";
 import { shuffle } from "lodash";
-import { randomNumber, randomScroll, randomWait, scrollInto } from "../lib/helpers";
-import randomWordFromWikipedia from "../lib/randomWordFromWikipedia";
+import { randomScroll } from "../lib/helpers";
 
 const { RAKUTEN_ID, RAKUTEN_PW } = process.env;
 
@@ -92,7 +90,7 @@ test("web kuji", async ({ browser }) => {
         await page.waitForTimeout(30 * 1000);
 
         console.log("Maybe done.");
-      } catch (error) {
+      } catch (_error) {
         console.log("It already seem to have been done.");
       }
       if (chance.bool({ likelihood: 50 })) {

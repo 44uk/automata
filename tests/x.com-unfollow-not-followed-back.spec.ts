@@ -3,7 +3,7 @@ import { downScroll, randomScroll, upScroll } from "../lib/helpers";
 import { login } from "../lib/x/helpers";
 
 const BASE_URL = "https://x.com";
-const WAVE_COUNT = 3;
+const WAVE_COUNT = 5;
 
 test.use({ baseURL: BASE_URL });
 
@@ -33,8 +33,8 @@ test("unfollow a not follow back user.", async ({ browser }) => {
     console.debug("Already Logged in.");
   }
   await page.goto("/following");
-  await page.setViewportSize({ width: 960, height: 3200 });
-  await downScroll(page, { try: 10 });
+  await page.setViewportSize({ width: 960, height: 720 });
+  await downScroll(page, { try: 8 });
 
   for (let i = 1; i <= WAVE_COUNT; i++) {
     const userCellsLoc = await page.locator('//div[@data-testid="cellInnerDiv"][not(div//div[@data-testid="userFollowIndicator"])]');

@@ -18,8 +18,6 @@ test("pointmall", async ({ browser }) => {
 
   await page.goto("/");
 
-  // ("_karte-temp-close__5p7a_ _krt-icon-close07__5p7a_ karte-close _karte-temp-hover__5p7a_");
-
   // オーバーレイを閉じる
   await randomScroll(page, { try: 3 });
   if ((await page.locator(".karte-close").count()) > 0) {
@@ -51,46 +49,13 @@ test("pointmall", async ({ browser }) => {
   }
   await page.goto("/");
 
-  // ビンゴ
-  try {
-    console.debug("Start BINGO");
-    await page.getByRole("link", { name: "BINGO", exact: true }).click();
-    await expect(page).toHaveURL(/game\/bingo/);
-    await randomWait(page, 3);
-
-    await page.bringToFront();
-    const startButton = await page.getByRole("link", { name: "今すぐスタート！" });
-    console.debug("BINGO Clicked Start button");
-    console.debug(await startButton.count());
-    startButton.click({ timeout: 5000 });
-    // await page.click("#main .lp-header-btn", { delay: 100 });
-    await page.bringToFront();
-
-    await randomScroll(page);
-    await page.waitForSelector("#bingocard", { state: "visible" });
-
-    if (await page.$("#video-add-modal")) {
-      console.debug("BINGO Play Ad");
-      await page.$eval("#video-add-modal-play-btn", (el) => (el as HTMLLIElement).click());
-      await page.waitForTimeout(60 * 1000);
-    }
-    console.debug("Waiting for finish.");
-    await page.waitForTimeout(60 * 1000);
-    console.debug("BINGO Maybe finished.");
-  } catch (error) {
-    // if (!(error instanceof TimeoutError)) { throw error; }
-    console.debug("%o", error);
-  } finally {
-    await page.goto("/");
-  }
-
   // 抽選券のクリック
   try {
     console.debug("Start Banner Clicking.");
-    await page.waitForSelector("#dream-lot", { state: "visible" });
+    await page.waitForSelector(".dreamkuji-list", { state: "visible" });
     await randomScroll(page);
 
-    const banners = await page.$$("#dream-lot .lot-list li a");
+    const banners = await page.$$(".dreamkuji-list > .dreamkuji-item > a");
     console.debug("Banners found: %d", banners.length);
     for (let i = 0; i < banners.length; i++) {
       const banner = banners[i];
@@ -135,22 +100,22 @@ test("pointmall", async ({ browser }) => {
     }
 
     await page.click('//div[@class="mailboxBox"]/ul/li[contains(@class, "unread")][1]/div[@class="listCont"]/a');
-    for (let i = 12; i > 0; --i) {
+    for (let i = 16; i > 0; --i) {
       await randomScroll(page);
       scrollInto(page, '//div[@id="mailContents"]//div[@class="mailbox"]//a[contains(@href, "pmrd")]');
       const banner =
         (await page.$('//div[@id="mailContents"]//div[@class="mailbox"]//*[@class="point_url"]//a')) ||
         (await page.$('//div[@id="mailContents"]//div[@class="mailbox"]//img[contains(@alt, "抽せん券をGET")]'));
       if (banner) {
-        console.debug("Banner found!");
+        console.debug("Banner found and Open!");
         await banner.click({ delay: 100 });
-        await randomWait(page, 15);
+        await randomWait(page, 8);
         await page.bringToFront();
       } else {
         console.debug("Banner not found...");
-        await randomWait(page, 15);
+        await randomWait(page, 8);
       }
-      await randomWait(page, 5);
+      await randomWait(page, 4);
 
       // 次のメールへ
       console.debug("Mail crawl count left: %d", i);
@@ -163,6 +128,39 @@ test("pointmall", async ({ browser }) => {
   } finally {
     await page.goto("/");
   }
+
+  // // ビンゴ
+  // try {
+  //   console.debug("Start BINGO");
+  //   await page.getByRole("link", { name: "BINGO", exact: true }).click();
+  //   await expect(page).toHaveURL(/game\/bingo/);
+  //   await randomWait(page, 3);
+
+  //   await page.bringToFront();
+  //   const startButton = await page.getByRole("link", { name: "今すぐスタート！" });
+  //   console.debug("BINGO Clicked Start button");
+  //   console.debug(await startButton.count());
+  //   startButton.click({ timeout: 5000 });
+  //   // await page.click("#main .lp-header-btn", { delay: 100 });
+  //   await page.bringToFront();
+
+  //   await randomScroll(page);
+  //   await page.waitForSelector("#bingocard", { state: "visible" });
+
+  //   if (await page.$("#video-add-modal")) {
+  //     console.debug("BINGO Play Ad");
+  //     await page.$eval("#video-add-modal-play-btn", (el) => (el as HTMLLIElement).click());
+  //     await page.waitForTimeout(60 * 1000);
+  //   }
+  //   console.debug("Waiting for finish.");
+  //   await page.waitForTimeout(60 * 1000);
+  //   console.debug("BINGO Maybe finished.");
+  // } catch (error) {
+  //   // if (!(error instanceof TimeoutError)) { throw error; }
+  //   console.debug("%o", error);
+  // } finally {
+  //   await page.goto("/");
+  // }
 
   // await page.waitForTimeout(30 * 1000)
 
@@ -210,10 +208,6 @@ test("pointmall", async ({ browser }) => {
   // await scrollInto(page, '#gacha-main-inner');
   // await page.click('#gacha-main-inner .normal_start', { delay: 250, clickCount: 3 });
   // await page.waitForTimeout(15 * 1000)
-
-  // スロット
-
-  // BINGO
 
   await page.context().storageState({ path: "state.json" });
   // await page.waitForTimeout(5000 * 6)
