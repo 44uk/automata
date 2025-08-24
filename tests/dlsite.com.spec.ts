@@ -1,5 +1,5 @@
 import { expect, test } from "@playwright/test";
-import { randomNumber, randomScroll, randomWait, removeCookies, scrollInto } from "../lib/helpers";
+import { randomNumber, randomScroll, scrollInto } from "../lib/helpers";
 
 const { DLSITE_ID, DLSITE_PW } = process.env;
 
