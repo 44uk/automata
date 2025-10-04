@@ -1,5 +1,5 @@
 import { expect, test } from "@playwright/test";
-import { naturalScroll, naturalWait, randomNumber, randomScroll, randomWait } from "../lib/helpers";
+import { naturalScroll, naturalWait, randomNumber } from "../lib/helpers";
 import { login } from "../lib/x/helpers";
 
 const BASE_URL = "https://x.com";

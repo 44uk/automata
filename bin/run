@@ -24,6 +24,6 @@ export ADULTBLOGRANKING_ID=2125781
 export PING=1
 bun run start -- tests/www.adultblogranking.com.spec.ts;
 
-bun run start -- tests/websearch.rakuten.co.jp.spec.ts;
+# bun run start -- tests/websearch.rakuten.co.jp.spec.ts;
 
 bun run start -- tests/pointmall.rakuten.co.jp.spec.ts;
