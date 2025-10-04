@@ -1,29 +1,29 @@
 #!/bin/bash
 bun run clean-cookies;
 
-# bun run start -- tests/dlsite.com.spec.ts;
-
-# bun run start -- tests/www.sokmil.com.spec.ts;
-
-#bun run start -- tests/www.sbisec.co.jp.spec.ts
-
+export PING=1
 bun run start -- tests/www.adultblogranking.com.spec.ts;
+
 export ADULTBLOGRANKING_ID=2123812
 export PING=1
 bun run start -- tests/www.adultblogranking.com.spec.ts;
+
 export ADULTBLOGRANKING_ID=2123857
 export PING=1
 bun run start -- tests/www.adultblogranking.com.spec.ts;
+
 export ADULTBLOGRANKING_ID=2125607
 export PING=1
 bun run start -- tests/www.adultblogranking.com.spec.ts;
+
 export ADULTBLOGRANKING_ID=2125608
 export PING=1
 bun run start -- tests/www.adultblogranking.com.spec.ts;
+
 export ADULTBLOGRANKING_ID=2125781
 export PING=1
 bun run start -- tests/www.adultblogranking.com.spec.ts;
 
-# bun run start -- tests/websearch.rakuten.co.jp.spec.ts;
-
 bun run start -- tests/pointmall.rakuten.co.jp.spec.ts;
+
+bun run start -- tests/websearch.rakuten.co.jp.spec.ts;

@@ -1,19 +1,25 @@
 #!/bin/bash
 bun run clean-cookies;
 
+export PING=1
 bun run start -- tests/www.adultblogranking.com.spec.ts;
+
 export ADULTBLOGRANKING_ID=2123812
 export PING=1
 bun run start -- tests/www.adultblogranking.com.spec.ts;
+
 export ADULTBLOGRANKING_ID=2123857
 export PING=1
 bun run start -- tests/www.adultblogranking.com.spec.ts;
+
 export ADULTBLOGRANKING_ID=2125607
 export PING=1
 bun run start -- tests/www.adultblogranking.com.spec.ts;
+
 export ADULTBLOGRANKING_ID=2125608
 export PING=1
 bun run start -- tests/www.adultblogranking.com.spec.ts;
+
 export ADULTBLOGRANKING_ID=2125781
 export PING=1
 bun run start -- tests/www.adultblogranking.com.spec.ts;
