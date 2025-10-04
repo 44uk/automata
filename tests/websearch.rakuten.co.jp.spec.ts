@@ -10,10 +10,6 @@ const BASE_URL = "https://websearch.rakuten.co.jp";
 test.use({ baseURL: BASE_URL });
 
 test("web search", async ({ browser, page: initialPage }) => {
-  // await initialPage.goto('chrome://extensions')
-  // await initialPage.click('css=body > extensions-manager >> css=#items-list >> css=extensions-item >> css=#detailsButton');
-  // await initialPage.click('css=body > extensions-manager >> css=#viewManager > extensions-detail-view >> css=#allow-incognito');
-
   const context = await browser.newContext({
     locale: "ja",
   });
@@ -48,7 +44,7 @@ test("web search", async ({ browser, page: initialPage }) => {
       await page.type('form input[name="password"]', RAKUTEN_PW!, {
         delay: randomNumber(100, 200),
       });
-      await page.click('//form//div[@role="button"]/div/div[.="次へ"]');
+      await page.click('(//form//div[@role="button"]/div/div[.="次へ"])[last()]');
       await randomWait(page, 2);
     }
     await expect(page).toHaveURL(/SimpleTop/);
@@ -79,24 +75,16 @@ test("web search", async ({ browser, page: initialPage }) => {
 
   await page.waitForSelector("#simple-top-search-form", { state: "visible" });
   console.info("Search form found.");
-
-  (await page.$("#clear-history"))?.click();
-  await scrollInto(page, "#page");
   await randomWait(page);
 
   const chance = new Chance();
-  if (chance.bool({ likelihood: 60 })) {
-    await page.locator('//form[@id="simple-top-search-form"]//dl/dd//input').first().click();
-    console.info("First Word Clicked!");
-  } else {
-    const word = words.pop() || "リラックマ";
-    await page.fill("input#search-input", "");
-    await page.type("input#search-input", word, {
-      delay: randomNumber(100, 300),
-    });
-    await page.click("#search-submit");
-    console.info("Word: %s searched!", word);
-  }
+  const word = words.pop() || "ちいかわ";
+  await page.fill("input#search-input", "");
+  await page.type("input#search-input", word, {
+    delay: randomNumber(100, 300),
+  });
+  await page.click("#search-submit");
+  console.info("Word: %s searched!", word);
   await randomScroll(page);
 
   await page.waitForSelector("#myForm input[name='qt']", { state: "visible" });

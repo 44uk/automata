@@ -1,6 +1,6 @@
 import { expect, test } from "@playwright/test";
 import UserAgents from "user-agents";
-import { humanTypeText, naturalScroll, naturalWait, randomNumber, randomScroll, randomWait, scrollInto } from "../lib/helpers";
+import { humanTypeText, naturalScroll, naturalWait, scrollInto } from "../lib/helpers";
 
 const { ADULTBLOGRANKING_ID, ADULTBLOGRANKING_PW } = process.env;
 
